@@ -1,0 +1,12 @@
+
+//        CerrarSesion.setIcon("Icons/Close.ico");
+
+
+
+//        setIconImage(new ImageIcon("CerrarSesion.svg").getImage());
+
+
+//        JMenu Mantenimientos = new JMenu("Mantenimientos");
+//        MenuBar.add(Mantenimientos);
+//        JMenuItem Usuarios = new JMenuItem("Usuarios");
+//        Mantenimientos.add(Usuarios);
