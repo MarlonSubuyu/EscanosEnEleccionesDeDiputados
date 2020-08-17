@@ -1,2 +1,3 @@
 0;0;0;0;0;0;Admin;111;0;Marlon David;Subuyú Canté;marlonsubuyu.2012@gmail.com;
 Admin2;000;0;Ejemplo;ApellidoEjemplo;NO-MAIL;
+error;1010;1;e;e1;NO-MAIL;

@@ -1,7 +1,8 @@
 import javax.swing.*;
 import java.awt.*;
 import java.io.*;
-import java.util.ArrayList;
+//import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.Scanner;
 
 public class Login extends JFrame {
@@ -26,14 +27,12 @@ public class Login extends JFrame {
             if (Archivo.createNewFile()) {
                 System.out.println("Archivo creado: " + Archivo.getName());
             } else {
-                System.out.println("El archivo ya existe");
                 if (Archivo.length() == 0) {
-                    JOptionPane.showMessageDialog(null, "El archivo está vacío");
+                    ImageIcon advertencia = new ImageIcon(getClass().getResource("Icons/Advertencia.png"));
+                    JOptionPane.showMessageDialog(null, "Archivo vacío", null, JOptionPane.INFORMATION_MESSAGE, advertencia);
                     FileWriter Writer = new FileWriter(Archivo, true);
                     Writer.write("0" + ";" + "0" + ";" + "0" + ";" + "0" + ";" + "0" + ";" + "0" + ";" + "\r");
                     Writer.close();
-                } else {
-                    System.out.println("El archivo no está vacío");
                 }
             }
             System.out.println("Esta es la dirección donde se guarda el archivo: " + System.getProperty("user.dir") + "\\src\\Archivos\\Usuarios.txt" + "\n\n");
@@ -66,7 +65,6 @@ public class Login extends JFrame {
         Si.addActionListener(ea -> {
             Registrarse.setEnabled(true);
             IniciarSesion.setEnabled(false);
-            System.out.println("Registrarse");
             Registrarse.addActionListener(i -> {
                 String Nivel_Acceso = "0"; //0 (Cero) para el administrador
                 sesion(Nivel_Acceso, Archivo);
@@ -76,7 +74,6 @@ public class Login extends JFrame {
         No.addActionListener(ee -> {
             Registrarse.setEnabled(false);
             IniciarSesion.setEnabled(true);
-            System.out.println("Iniciar sesion");
             IniciarSesion.addActionListener(i -> {
                 String Nivel_Acceso = "1"; //1 (Uno) para usuarios normales
                 sesion(Nivel_Acceso, Archivo);
@@ -100,10 +97,11 @@ public class Login extends JFrame {
             String Usuario = UsuarioInput.getText();
             String Password = String.valueOf(PasswordInput.getPassword());
             if (Usuario.equals("") || Password.equals("")) {
-                JOptionPane.showMessageDialog(null, "No puede dejar los campos vacios");
+                ImageIcon error = new ImageIcon(getClass().getResource("Icons/AdvertenciaVacio.png"));
+                JOptionPane.showMessageDialog(null, "No puede dejar los campos vacios", null, JOptionPane.INFORMATION_MESSAGE, error);
             } else {
                 Scanner scan = new Scanner(Usuarios);
-                ArrayList<String> Lista = new ArrayList<>();
+                LinkedList<String> Lista = new LinkedList<>();
 
                 String delimitador = "\\s*;\\s*";
                 scan.useDelimiter(delimitador);
@@ -122,26 +120,25 @@ public class Login extends JFrame {
                     Lista.add(APELLIDO);
                     Lista.add(EMAIL);
                     scan.nextLine();
-//                    System.out.println(u[0] + " " + u[1] + " " + u[2] + " " + u[3] + " " + u[4] + " " + u[5]);
                     if (Usuario.equals(USER) && Password.equals(PASS) && Nivel_Acceso.equals(LEVEL)) {
                         verificador = true;
-                    } else {
-                        System.out.println("Buscando...");
                     }
                 }
                 if (verificador) {
                     ImageIcon valida = new ImageIcon(getClass().getResource("Icons/SesionValida.png"));
-                    JOptionPane.showMessageDialog(null, new JLabel("Ha ingresado exitosamente", valida, JLabel.LEFT));
+                    JOptionPane.showMessageDialog(null, "Sesión válida", null, JOptionPane.INFORMATION_MESSAGE, valida);
                     MainWindow MW = new MainWindow();
                     MW.setVisible(true);
                     dispose();
                 } else {
-                    JOptionPane.showMessageDialog(null, "Usuario o contraseña incorrectos");
+                    ImageIcon denegada = new ImageIcon(getClass().getResource("Icons/SesionDenegada.png"));
+                    JOptionPane.showMessageDialog(null, "Sesión inválida", null, JOptionPane.INFORMATION_MESSAGE, denegada);
                 }
                 scan.close();
             }
         } catch (NullPointerException | IOException w) {
-            JOptionPane.showMessageDialog(null, "Ocurrio un error interno, inténtelo nuevamente");
+            ImageIcon error = new ImageIcon(getClass().getResource("Icons/Error.png"));
+            JOptionPane.showMessageDialog(null, "Ocurrio un error interno, inténtelo nuevamente", null, JOptionPane.INFORMATION_MESSAGE, error);
             UsuarioInput.setText(null);
             PasswordInput.setText(null);
         }
