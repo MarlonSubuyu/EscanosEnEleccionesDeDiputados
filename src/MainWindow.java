@@ -55,6 +55,14 @@ public class MainWindow extends JFrame {
     private JLabel IdMunicipiotxt;
     private JLabel NombreMunicipiotxt;
     private JLabel IdProvinciaMunicipiotxt;
+    private JButton btnAceptarCircunscripciones;
+    private JTextField IdCircunscripcion;
+    private JTextField NombreCircunscripcion;
+    private JTextField IdProvinciaCircuns;
+    private JTextField IdMunicipioCircuns;
+    private JTextField CantCandidatos;
+    private JTextField CrearCircunscripcion;
+    private JPanel CrearModificarCircunscripciones;
 
     public MainWindow() {
 
@@ -66,10 +74,12 @@ public class MainWindow extends JFrame {
         Consultas.setText("Consultas");
         GuardarUsuarios.setText("Guardar");
 
+
         MantenimientosUsuarios();
         MantenimientosPartidos();
         MantenimientosProvincias();
         MantenimientosMunicipios();
+        MantenimientosCircunscripciones();
 
         Image img = new ImageIcon(getClass().getResource("Icons/PrincipalPictureLogin.png")).getImage();
         ImageLabel.setIcon(new ImageIcon(img));
@@ -489,6 +499,210 @@ public class MainWindow extends JFrame {
                 IdProvinciaMunicipio.setText(null);
             }
         });
+    }
+
+    private void MantenimientosCircunscripciones(){
+
+        String Municipio = System.getProperty("user.dir") + "\\src\\Archivos\\Municipios.txt";
+        File LeerArchvioMunicipio = new File(Municipio);
+        String Provincia = System.getProperty("user.dir") + "\\src\\Archivos\\Provincia.txt";
+        File LeerArchivo = new File(Provincia); //Leer archivo es para leer el Id_provincia que se usa para verificar si el dato introducido existe en el archivo
+        String Circunscripciones = System.getProperty("user.dir") + "\\src\\Archivos\\Circunscripciones.txt";
+        File Archivo = new File(Circunscripciones);
+        String tempCircunscripciones = System.getProperty("user.dir") + "\\src\\Archivos\\tempCircunscripciones.txt";
+        File tempArchivo = new File(tempCircunscripciones);
+        String delimitador = "\\s*;\\s*";
+        FileException(Archivo);
+        
+        final boolean[] igual = {false};
+        String MODELO = "0" + ";" + "0" + ";" + "0" + ";" + "0" + ";" + "0" + ";" + "\r\n";
+        getValor(delimitador, Archivo, MODELO);
+        IdCircunscripcion.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyReleased(KeyEvent e) {
+                super.keyReleased(e);
+                if (getValor(delimitador, Archivo, MODELO).contains(IdCircunscripcion.getText())) {
+                    CrearCircunscripcion.setText("Modificando...");
+                    igual[0] = true;
+                } else {
+                    CrearCircunscripcion.setText("Creando...");
+                    igual[0] = false;
+                }
+            }
+        });
+
+        btnAceptarCircunscripciones.addActionListener(e -> {
+            String Id_CircunscripcionString = IdCircunscripcion.getText();
+            String Nombre_Circunscripcion = NombreCircunscripcion.getText();
+            String Id_Provincia_Circuns = IdProvinciaCircuns.getText();
+            String Id_Municipio_Circuns = IdMunicipioCircuns.getText();
+            String Cant_Candidatos = CantCandidatos.getText();
+            int[] Id_Municipio_CircunsArray;
+
+
+//            ErrorLoginUsuario.setText("");
+//            ErrorPasswordUsuario.setText("");
+
+            if (Id_CircunscripcionString.equals("") || Nombre_Circunscripcion .equals("")) {
+                ImageIcon list = new ImageIcon(getClass().getResource("Icons/warninglist.png"));
+                JOptionPane.showMessageDialog(null, "Todos los campos marcados con asterisco * deben estar llenos", null, JOptionPane.INFORMATION_MESSAGE, list);
+            } else if (igual[0]) {
+                boolean verificador = false;
+                boolean verificadorMunicipio = false;
+                int IdMunicipiosCircunscripcion = Integer.parseInt(Id_Municipio_Circuns);
+                try {
+                    ArrayList<String> Lista = new ArrayList<>();
+                    Scanner scan = new Scanner(LeerArchivo);
+                    scan.useDelimiter(delimitador);
+
+                    while (scan.hasNext()) {
+                        String ID = scan.next();
+                        String PROVINCIA = scan.next();
+                        Lista.add(ID);
+                        Lista.add(PROVINCIA);
+                        if (Id_Provincia_Circuns.equals(ID)) {
+                            verificador = true;
+                        }
+
+                        scan.nextLine();
+                    }
+                    scan.close();
+                    ArrayList<String> ListaMunicipios = new ArrayList<>();
+
+                    Scanner entrada = new Scanner(LeerArchvioMunicipio);
+                    entrada.useDelimiter(delimitador);
+
+                    while (entrada.hasNext()) {
+                        String ID = entrada.next();
+                        ListaMunicipios.add(ID);
+                        if (Id_Municipio_Circuns.equals(ID)) {
+                            verificador = true;
+                        }
+                        entrada.nextLine();
+                    }
+                    Id_Municipio_CircunsArray = getInts(ListaMunicipios);
+                    for(int i = 0; i < ListaMunicipios.size(); i++){
+                        Id_Municipio_CircunsArray[i] = Integer.parseInt(ListaMunicipios.get(i));
+                        if(Id_Municipio_CircunsArray[i] == IdMunicipiosCircunscripcion){
+                            verificadorMunicipio = true;
+                        }
+
+                    }
+                } catch (IOException ex) {
+                    ex.getStackTrace();
+                }
+                if (verificador && verificadorMunicipio) { //Si la provincia existe podemos pasar a registrar los datos
+                    String nCadena = (Id_CircunscripcionString + ";" + Nombre_Circunscripcion + ";" + Id_Provincia_Circuns + ";"); //+ "\r\n" Se agrego en el siguiente metodo
+                    ModificaDatos(nCadena, Id_CircunscripcionString, Archivo, tempArchivo);
+                    ImageIcon edit = new ImageIcon(getClass().getResource("Icons/Edit.png"));
+                    JOptionPane.showMessageDialog(null, "Municipio modificado exitosamente", null, JOptionPane.INFORMATION_MESSAGE, edit);
+                    IdMunicipio.setText(null);
+                    NombreMunicipio.setText(null);
+                } else {
+                    ImageIcon advertencia = new ImageIcon(getClass().getResource("Icons/AdvertenciaVacio.png"));
+                    // JOptionPane.showMessageDialog(null, "¡El ID de la provincia no existe!", null, JOptionPane.INFORMATION_MESSAGE, advertencia);
+                    if(!verificador && !verificadorMunicipio){
+                        System.out.println("No existen ambos");
+                        JOptionPane.showMessageDialog(null, " ¡El ID de la provincia y el ID del municipio no existen!", null, JOptionPane.INFORMATION_MESSAGE, advertencia);
+                    }
+                    else if (!verificadorMunicipio){
+
+                        System.out.println("No existe el municipio");
+                        JOptionPane.showMessageDialog(null, "¡El del municipio no existe!", null, JOptionPane.INFORMATION_MESSAGE, advertencia);
+                    }
+                    else{
+                        System.out.println("No existe la provincia");
+                        JOptionPane.showMessageDialog(null, "¡El ID de la provincia no existe!", null, JOptionPane.INFORMATION_MESSAGE, advertencia);
+                    }
+                }
+                IdProvinciaMunicipio.setText(null);
+            } else {
+
+                boolean verificadorMunicipio = false;
+                int IdMunicipiosCircunscripcion = Integer.parseInt(Id_Municipio_Circuns);
+                boolean verificador = false;
+                try {
+                    ArrayList<String> Lista = new ArrayList<>();
+                    Scanner scan = new Scanner(LeerArchivo);
+                    scan.useDelimiter(delimitador);
+                    scan.useDelimiter(delimitador);
+
+                    while (scan.hasNext()) {
+                        String ID = scan.next();
+                        String PROVINCIA = scan.next();
+                        Lista.add(ID);
+                        Lista.add(PROVINCIA);
+                        if (Id_Provincia_Circuns.equals(ID)) {
+                            verificador = true;
+                        }
+                        scan.nextLine();
+                    }
+                    scan.close();
+                    ArrayList<String> ListaMunicipios = new ArrayList<>();
+
+                    Scanner entrada = new Scanner(LeerArchvioMunicipio);
+                    entrada.useDelimiter(delimitador);
+
+                    while (entrada.hasNext()) {
+                        String ID = entrada.next();
+                        ListaMunicipios.add(ID);
+                        if (Id_Municipio_Circuns.equals(ID)) {
+                            verificador = true;
+                        }
+                        entrada.nextLine();
+
+                    }
+                    Id_Municipio_CircunsArray = getInts(ListaMunicipios);
+                    for(int i = 0; i < ListaMunicipios.size(); i++){
+                        Id_Municipio_CircunsArray[i] = Integer.parseInt(ListaMunicipios.get(i));
+                        if(Id_Municipio_CircunsArray[i]==IdMunicipiosCircunscripcion){
+                            verificadorMunicipio = true;
+                        }
+                    }
+                } catch (IOException ex) {
+                    ex.getStackTrace();
+                }
+                if (verificador && verificadorMunicipio) { //Si la provincia existe podemos pasar a registrar los datos
+                    try {
+                        IdMunicipiosCircunscripcion = Integer.parseInt(Id_CircunscripcionString);
+                        int Votos_Partidos = Integer.parseInt(Nombre_Circunscripcion);
+                        FileWriter Writer = new FileWriter(Municipio, true);
+                        Writer.write(Id_CircunscripcionString + ";" + Nombre_Circunscripcion + ";" + Id_Provincia_Circuns + ";" + Id_Municipio_Circuns + ";" + Cant_Candidatos + ";" + "\r\n");
+                        ImageIcon create = new ImageIcon(getClass().getResource("Icons/Edit.png"));
+                        JOptionPane.showMessageDialog(null, "Municipio creado exitosamente", null, JOptionPane.INFORMATION_MESSAGE, create);
+                        Writer.close();
+                    } catch (IOException ioException) {
+                        ioException.printStackTrace();
+                    } catch (NumberFormatException n) {
+                        ImageIcon list = new ImageIcon(getClass().getResource("Icons/warninglist.png"));
+                        JOptionPane.showMessageDialog(null, "Id del municipio debe ser un numero entero \nId de la provincia debe ser un numero entero", null, JOptionPane.INFORMATION_MESSAGE, list);
+                    }
+                    IdMunicipio.setText(null);
+                    NombreMunicipio.setText(null);
+                } else {
+                    ImageIcon advertencia = new ImageIcon(getClass().getResource("Icons/AdvertenciaVacio.png"));
+                    // JOptionPane.showMessageDialog(null, "¡El ID de la provincia no existe!", null, JOptionPane.INFORMATION_MESSAGE, advertencia);
+                        if(!verificador && !verificadorMunicipio){
+                            System.out.println("No existen ambos");
+                            JOptionPane.showMessageDialog(null, " ¡El ID de la provincia y el ID del municipio no existen!", null, JOptionPane.INFORMATION_MESSAGE, advertencia);
+                        }
+                        else if (!verificadorMunicipio){
+
+                            System.out.println("No existe el municipio");
+                            JOptionPane.showMessageDialog(null, "¡El del municipio no existe!", null, JOptionPane.INFORMATION_MESSAGE, advertencia);
+                        }
+                        else{
+                            System.out.println("No existe la provincia");
+                            JOptionPane.showMessageDialog(null, "¡El ID de la provincia no existe!", null, JOptionPane.INFORMATION_MESSAGE, advertencia);
+                        }
+                }
+                IdProvinciaMunicipio.setText(null);
+            }
+        });
+    }
+
+    public int[] getInts(ArrayList<String> listaMunicipios) {
+        return new int[listaMunicipios.size()];
     }
 
     public ArrayList<String> getValor(String delimitador, File Archivo, String MODELO) {
