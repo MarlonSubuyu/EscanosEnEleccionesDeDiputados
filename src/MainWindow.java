@@ -1,9 +1,13 @@
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableRowSorter;
 import java.awt.*;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.io.*;
 import java.util.*;
+
+import static javax.swing.RowFilter.regexFilter;
 
 public class MainWindow extends JFrame {
     private JPanel rootMW;
@@ -55,6 +59,14 @@ public class MainWindow extends JFrame {
     private JLabel IdMunicipiotxt;
     private JLabel NombreMunicipiotxt;
     private JLabel IdProvinciaMunicipiotxt;
+    private JTextField SearchUsuarios;
+    private JTable UsuariosTable;
+    private JTable PartidosTable;
+    private JTextField SearchPartidos;
+    private JTextField SearchProvincias;
+    private JTable ProvinciasTable;
+    private JTextField SearchMunicipios;
+    private JTable MunicipiosTable;
 
     public MainWindow() {
 
@@ -65,11 +77,18 @@ public class MainWindow extends JFrame {
         Procesos.setText("Procesos");
         Consultas.setText("Consultas");
         GuardarUsuarios.setText("Guardar");
+        ArrayList<String> ListaUsuarios = new ArrayList<>();
+        ArrayList<String> ListaMunicipios = new ArrayList<>();
 
-        MantenimientosUsuarios();
+        MantenimientosUsuarios(ListaUsuarios);
         MantenimientosPartidos();
         MantenimientosProvincias();
-        MantenimientosMunicipios();
+        MantenimientosMunicipios(ListaMunicipios);
+        //Leer archivos
+        LeerUsuarios();
+        LeerPartidos();
+        LeerProvincias();
+        LeerMunicipios();
 
         Image img = new ImageIcon(getClass().getResource("Icons/PrincipalPictureLogin.png")).getImage();
         ImageLabel.setIcon(new ImageIcon(img));
@@ -136,7 +155,7 @@ public class MainWindow extends JFrame {
         UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
     }
 
-    public void MantenimientosUsuarios() {
+    public void MantenimientosUsuarios( ArrayList<String> ListaUsuarios ) {
         String Usuarios = System.getProperty("user.dir") + "\\src\\Archivos\\Usuarios.txt";
         File Archivo = new File(Usuarios);
         FileException(Archivo);
@@ -176,7 +195,6 @@ public class MainWindow extends JFrame {
                     if (Email_Usuario.equals("") || Email_Usuario.equals("NO-MAIL")) {
                         Email_Usuario = "NO-MAIL";
                     }
-                    ArrayList<String> Lista = new ArrayList<>();
                     String delimitador = "\\s*;\\s*";
                     Scanner scan = new Scanner(Archivo);
                     scan.useDelimiter(delimitador);
@@ -188,12 +206,12 @@ public class MainWindow extends JFrame {
                         String NAME = scan.next();
                         String APELLIDO = scan.next();
                         String EMAIL = scan.next();
-                        Lista.add(USER);
-                        Lista.add(PASS);
-                        Lista.add(LEVEL);
-                        Lista.add(NAME);
-                        Lista.add(APELLIDO);
-                        Lista.add(EMAIL);
+                        ListaUsuarios.add(USER);
+                        ListaUsuarios.add(PASS);
+                        ListaUsuarios.add(LEVEL);
+                        ListaUsuarios.add(NAME);
+                        ListaUsuarios.add(APELLIDO);
+                        ListaUsuarios.add(EMAIL);
                         if (Login_Usuario.equals(USER) || Pass_Usuario.equals(PASS)) {
                             if (Login_Usuario.equals(USER) && Pass_Usuario.equals(PASS)) {
                                 ErrorLoginUsuario.setText("Utilice otro nombre de usuario");
@@ -364,7 +382,7 @@ public class MainWindow extends JFrame {
 
     }
 
-    private void MantenimientosMunicipios() {
+    private void MantenimientosMunicipios( ArrayList<String> ListaMunicipios ) {
 //        System.out.println("Mantenimiento muni");
 //        new MantenimientosMUNICIPIOS(GuardarMunicipios, IdMunicipio, NombreMunicipio, IdProvinciaMunicipio, CrearModificarMunicipios, IdMunicipiotxt, NombreMunicipiotxt, IdProvinciaMunicipiotxt);
         String Municipio = System.getProperty("user.dir") + "\\src\\Archivos\\Municipios.txt";
@@ -411,7 +429,7 @@ public class MainWindow extends JFrame {
             } else if (igual[0]) {
                 boolean verificador = false;
                 try {
-                    ArrayList<String> Lista = new ArrayList<>();
+
                     Scanner scan = new Scanner(LeerArchivo);
                     scan.useDelimiter(delimitador);
                     scan.useDelimiter(delimitador);
@@ -419,8 +437,8 @@ public class MainWindow extends JFrame {
                     while (scan.hasNext()) {
                         String ID = scan.next();
                         String PROVINCIA = scan.next();
-                        Lista.add(ID);
-                        Lista.add(PROVINCIA);
+                        ListaMunicipios.add(ID);
+                        ListaMunicipios.add(PROVINCIA);
                         if (Id_Provincia_MunicipioString.equals(ID)) {
                             verificador = true;
                         }
@@ -446,7 +464,6 @@ public class MainWindow extends JFrame {
 
                 boolean verificador = false;
                 try {
-                    ArrayList<String> Lista = new ArrayList<>();
                     Scanner scan = new Scanner(LeerArchivo);
                     scan.useDelimiter(delimitador);
                     scan.useDelimiter(delimitador);
@@ -454,8 +471,8 @@ public class MainWindow extends JFrame {
                     while (scan.hasNext()) {
                         String ID = scan.next();
                         String PROVINCIA = scan.next();
-                        Lista.add(ID);
-                        Lista.add(PROVINCIA);
+                        ListaMunicipios.add(ID);
+                        ListaMunicipios.add(PROVINCIA);
                         if (Id_Provincia_MunicipioString.equals(ID)) {
                             verificador = true;
                         }
@@ -519,9 +536,7 @@ public class MainWindow extends JFrame {
     }
 
     public void ModificaDatos(String nCadena, String ID, File Archivo, File tempArchivo) {
-//        TODO ejemplo de ncadena
         int cod = Integer.parseInt(ID);
-
         try {
             if (Archivo.exists()) {
                 String linea;
@@ -617,5 +632,155 @@ public class MainWindow extends JFrame {
             Login.setVisible(true);
             dispose();
         });
+    }
+
+    public void LeerUsuarios() {
+        String Usuarios = System.getProperty("user.dir") + "\\src\\Archivos\\Usuarios.txt";
+        File Archivo = new File(Usuarios);
+        FileException(Archivo);
+        try {
+            String[] columnsName = {"Usuario", "Password", "Nivel de acceso", "Nombre del usuario", "Apellidos del usuario", "Email del usuario"};
+            String delimitador = "\\s*;\\s*";
+            Scanner scan = new Scanner(Archivo);
+            scan.useDelimiter(delimitador);
+            DefaultTableModel model = (DefaultTableModel) UsuariosTable.getModel();
+            model.setColumnIdentifiers(columnsName);
+            while (scan.hasNext()) {
+                String USER = scan.next();
+                String PASS = scan.next();
+                String LEVEL = scan.next();
+                String NAME = scan.next();
+                String APELLIDO = scan.next();
+                String EMAIL = scan.next();
+                String[] DATA = {USER, PASS, LEVEL, NAME, APELLIDO, EMAIL};
+                model.addRow(DATA);
+                scan.nextLine();
+            }
+
+            SearchUsuarios.addKeyListener(new KeyAdapter() {
+                @Override
+                public void keyReleased( KeyEvent e ) {
+                    super.keyReleased(e);
+                    String search = SearchUsuarios.getText().toLowerCase();
+                    TableRowSorter<DefaultTableModel> tr = new TableRowSorter<>(model); //DefaultTableModel
+                    UsuariosTable.setRowSorter(tr);
+                    tr.setRowFilter(regexFilter(search));
+                }
+            });
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.out.println("Error al leer la tabla Usuarios");
+        }
+    }
+
+    public void LeerPartidos() {
+        String Partidos = System.getProperty("user.dir") + "\\src\\Archivos\\Partido.txt";
+        File Archivo = new File(Partidos);
+        FileException(Archivo);
+        try {
+            String[] columnsName = {"Id del partido", "Descripción del partido", "Votos del partido"};
+            String delimitador = "\\s*;\\s*";
+            Scanner scan = new Scanner(Archivo);
+            scan.useDelimiter(delimitador);
+            DefaultTableModel model = (DefaultTableModel) PartidosTable.getModel();
+            model.setColumnIdentifiers(columnsName);
+            while (scan.hasNext()) {
+                String ID = scan.next();
+                String DESCRIPCION = scan.next();
+                String VOTOS = scan.next();
+                String[] DATA = {ID, DESCRIPCION, VOTOS};
+                model.addRow(DATA);
+                scan.nextLine();
+            }
+
+            SearchPartidos.addKeyListener(new KeyAdapter() {
+                @Override
+                public void keyReleased( KeyEvent e ) {
+                    super.keyReleased(e);
+                    String search = SearchPartidos.getText().toLowerCase();
+                    TableRowSorter<DefaultTableModel> tr = new TableRowSorter<>(model); //DefaultTableModel
+                    PartidosTable.setRowSorter(tr);
+                    tr.setRowFilter(regexFilter(search));
+                }
+            });
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.out.println("Error al leer la tabla Partidos");
+        }
+    }
+
+    public void LeerProvincias() {
+        String Provincias = System.getProperty("user.dir") + "\\src\\Archivos\\Provincia.txt";
+        File Archivo = new File(Provincias);
+        FileException(Archivo);
+        try {
+            String[] cabecera = {"Id de la provincia", "Nombre de la provincia"};
+            String delimitador = "\\s*;\\s*";
+            Scanner scan = new Scanner(Archivo);
+            scan.useDelimiter(delimitador);
+            DefaultTableModel model = (DefaultTableModel) ProvinciasTable.getModel();
+            model.setColumnIdentifiers(cabecera);
+            while (scan.hasNext()) {
+                String ID = scan.next();
+                String NOMBRE = scan.next();
+                String[] DATA = {ID, NOMBRE};
+                model.addRow(DATA);
+                scan.nextLine();
+            }
+
+            SearchProvincias.addKeyListener(new KeyAdapter() {
+                @Override
+                public void keyReleased( KeyEvent e ) {
+                    super.keyReleased(e);
+                    String search = SearchProvincias.getText().toLowerCase();
+                    TableRowSorter<DefaultTableModel> tr = new TableRowSorter<>(model); //DefaultTableModel
+                    ProvinciasTable.setRowSorter(tr);
+                    tr.setRowFilter(regexFilter(search));
+                }
+            });
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.out.println("Error al leer la tabla Provincias");
+        }
+    }
+
+    public void LeerMunicipios() {
+        String Municipios = System.getProperty("user.dir") + "\\src\\Archivos\\Municipios.txt";
+        File Archivo = new File(Municipios);
+        FileException(Archivo);
+        try {
+            String[] cabecera = {"Id del municipio", "Descripción del municipio", "Id de la provincia"};
+            String delimitador = "\\s*;\\s*";
+            Scanner scan = new Scanner(Archivo);
+            scan.useDelimiter(delimitador);
+            DefaultTableModel model = (DefaultTableModel) MunicipiosTable.getModel();
+            model.setColumnIdentifiers(cabecera);
+            while (scan.hasNext()) {
+                String ID = scan.next();
+                String DESCRIPCION = scan.next();
+                String PROVINCIA = scan.next();
+                String[] DATA = {ID, DESCRIPCION, PROVINCIA};
+                model.addRow(DATA);
+                scan.nextLine();
+            }
+
+            SearchMunicipios.addKeyListener(new KeyAdapter() {
+                @Override
+                public void keyReleased( KeyEvent e ) {
+                    super.keyReleased(e);
+                    String search = SearchMunicipios.getText().toLowerCase();
+                    TableRowSorter<DefaultTableModel> tr = new TableRowSorter<>(model); //DefaultTableModel
+                    MunicipiosTable.setRowSorter(tr);
+                    tr.setRowFilter(regexFilter(search));
+                }
+            });
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.out.println("Error al leer la tabla Provincias");
+        }
     }
 }

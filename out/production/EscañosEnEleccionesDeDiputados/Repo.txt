@@ -10,3 +10,56 @@
 //        MenuBar.add(Mantenimientos);
 //        JMenuItem Usuarios = new JMenuItem("Usuarios");
 //        Mantenimientos.add(Usuarios);
+
+
+///////////////////////////////////////////////// JTABLE
+//            ArrayList<ArrayList<String>> Usuario = new ArrayList<>();
+//            BufferedReader reader = new BufferedReader(new FileReader(Usuarios));
+//            int lines = 0;
+//            int l =0;
+//            while (reader.readLine() != null) lines++;
+//            reader.close();
+//            String[][] DATA = new String[lines][6];
+//            Object[][] DATAS = new Object[lines][6];
+//            while (scan.hasNext()) {
+//                for(int i=0; i<6; i++){
+//                    String S = scan.next();
+//                    DATA[l][i]=S;
+//                    DATAS[l][i] = S;
+//                }
+//                l++;
+//
+////                model.addRow(DATA);
+//                scan.nextLine();
+//            }
+//
+//            for(l = 0; l<lines; l++){
+//                for(int i = 0; i<6; i++){
+//                    System.out.print(DATA[l][i] + ";");
+//                }
+//                System.out.println();
+//            }
+//            System.out.println("-------------------------");
+//            System.out.println("Objeto DATAS\n");
+//            for(l = 0; l<lines; l++){
+//                for(int i = 0; i<6; i++){
+//                    System.out.print(DATAS[l][i] + "; ");
+//                }
+//                System.out.println();
+//            }
+//            Object[][] P = {{"a","b","c","d","e","f"}, {"aa","ba","ca","da","ea","fa"}, {"as","bs","cs","ds","es","fs"}};
+//            JTable jTable1 = new JTable(DATAS, columnsName);
+//            DefaultTableModel model = new DefaultTableModel(6,lines);
+//            jTable1.setModel(model);
+//            String[] DATA;
+//            JTable U = new JTable(DATAS, columnsName);
+
+//            ConsultasUsuarios.add(U);
+//            Object[] T = new Object[Usuario.size()];
+//            Object[] T = Usuario.toArray(new Object[]{Usuario.size()});
+//            for(int i=0; i<Usuario.size(); i++){
+//                T[i] = Usuario.get(i);
+//            }
+//            JTable tabla = new JTable((Object[][]) T,columnsName);
+//            ConsultasUsuarios.add(tabla);
+//            }

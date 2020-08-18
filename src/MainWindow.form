@@ -3,7 +3,7 @@
   <grid id="27dc6" binding="rootMW" layout-manager="GridLayoutManager" row-count="1" column-count="2" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
     <margin top="0" left="0" bottom="0" right="0"/>
     <constraints>
-      <xy x="20" y="20" width="827" height="772"/>
+      <xy x="20" y="20" width="889" height="772"/>
     </constraints>
     <properties/>
     <border type="none"/>
@@ -571,7 +571,9 @@
                     <preferred-size width="200" height="200"/>
                   </grid>
                 </constraints>
-                <properties/>
+                <properties>
+                  <font size="16"/>
+                </properties>
                 <border type="none"/>
                 <children>
                   <grid id="c9c4c" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
@@ -601,7 +603,9 @@
                     <preferred-size width="200" height="200"/>
                   </grid>
                 </constraints>
-                <properties/>
+                <properties>
+                  <font size="16"/>
+                </properties>
                 <border type="none"/>
                 <children>
                   <grid id="2f58d" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
@@ -631,44 +635,208 @@
                     <preferred-size width="200" height="200"/>
                   </grid>
                 </constraints>
-                <properties/>
+                <properties>
+                  <font size="16"/>
+                </properties>
                 <border type="none"/>
                 <children>
-                  <grid id="bd357" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+                  <grid id="bd357" layout-manager="GridLayoutManager" row-count="2" column-count="2" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
                     <margin top="0" left="0" bottom="0" right="0"/>
                     <constraints>
                       <tabbedpane title="Usuarios"/>
                     </constraints>
-                    <properties/>
+                    <properties>
+                      <font size="16"/>
+                    </properties>
                     <border type="none"/>
-                    <children/>
+                    <children>
+                      <component id="2bb72" class="javax.swing.JTextField" binding="SearchUsuarios">
+                        <constraints>
+                          <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+                            <preferred-size width="150" height="-1"/>
+                          </grid>
+                        </constraints>
+                        <properties>
+                          <font size="16"/>
+                        </properties>
+                      </component>
+                      <scrollpane id="6cc9e">
+                        <constraints>
+                          <grid row="1" column="0" row-span="1" col-span="2" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+                        </constraints>
+                        <properties>
+                          <enabled value="true"/>
+                          <font size="16"/>
+                        </properties>
+                        <border type="none"/>
+                        <children>
+                          <component id="a3c" class="javax.swing.JTable" binding="UsuariosTable">
+                            <constraints/>
+                            <properties>
+                              <autoResizeMode value="2"/>
+                              <enabled value="false"/>
+                              <fillsViewportHeight value="false"/>
+                              <font size="16"/>
+                            </properties>
+                          </component>
+                        </children>
+                      </scrollpane>
+                      <component id="73dff" class="javax.swing.JLabel">
+                        <constraints>
+                          <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                        </constraints>
+                        <properties>
+                          <font size="16"/>
+                          <icon value="Icons/search.png"/>
+                          <text value=""/>
+                        </properties>
+                      </component>
+                    </children>
                   </grid>
-                  <grid id="a1ac9" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+                  <grid id="a1ac9" layout-manager="GridLayoutManager" row-count="2" column-count="2" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
                     <margin top="0" left="0" bottom="0" right="0"/>
                     <constraints>
                       <tabbedpane title="Partidos"/>
                     </constraints>
-                    <properties/>
+                    <properties>
+                      <font size="16"/>
+                    </properties>
                     <border type="none"/>
-                    <children/>
+                    <children>
+                      <component id="66657" class="javax.swing.JTextField" binding="SearchPartidos">
+                        <constraints>
+                          <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+                            <preferred-size width="150" height="-1"/>
+                          </grid>
+                        </constraints>
+                        <properties>
+                          <font size="16"/>
+                        </properties>
+                      </component>
+                      <component id="7cc68" class="javax.swing.JLabel">
+                        <constraints>
+                          <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                        </constraints>
+                        <properties>
+                          <icon value="Icons/search.png"/>
+                          <text value=""/>
+                        </properties>
+                      </component>
+                      <scrollpane id="c17b1">
+                        <constraints>
+                          <grid row="1" column="0" row-span="1" col-span="2" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+                        </constraints>
+                        <properties>
+                          <font size="16"/>
+                        </properties>
+                        <border type="none"/>
+                        <children>
+                          <component id="53ce7" class="javax.swing.JTable" binding="PartidosTable">
+                            <constraints/>
+                            <properties>
+                              <enabled value="false"/>
+                              <font size="16"/>
+                            </properties>
+                          </component>
+                        </children>
+                      </scrollpane>
+                    </children>
                   </grid>
-                  <grid id="dac2d" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+                  <grid id="dac2d" layout-manager="GridLayoutManager" row-count="2" column-count="2" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
                     <margin top="0" left="0" bottom="0" right="0"/>
                     <constraints>
                       <tabbedpane title="Provincias"/>
                     </constraints>
                     <properties/>
                     <border type="none"/>
-                    <children/>
+                    <children>
+                      <component id="cf9de" class="javax.swing.JTextField" binding="SearchProvincias">
+                        <constraints>
+                          <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+                            <preferred-size width="150" height="-1"/>
+                          </grid>
+                        </constraints>
+                        <properties>
+                          <font size="16"/>
+                        </properties>
+                      </component>
+                      <component id="c6c00" class="javax.swing.JLabel">
+                        <constraints>
+                          <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                        </constraints>
+                        <properties>
+                          <font size="16"/>
+                          <icon value="Icons/search.png"/>
+                          <text value=""/>
+                        </properties>
+                      </component>
+                      <scrollpane id="f020d">
+                        <constraints>
+                          <grid row="1" column="0" row-span="1" col-span="2" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+                        </constraints>
+                        <properties>
+                          <font size="16"/>
+                        </properties>
+                        <border type="none"/>
+                        <children>
+                          <component id="59388" class="javax.swing.JTable" binding="ProvinciasTable">
+                            <constraints/>
+                            <properties>
+                              <enabled value="false"/>
+                              <font size="16"/>
+                            </properties>
+                          </component>
+                        </children>
+                      </scrollpane>
+                    </children>
                   </grid>
-                  <grid id="9b0ca" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+                  <grid id="9b0ca" layout-manager="GridLayoutManager" row-count="2" column-count="2" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
                     <margin top="0" left="0" bottom="0" right="0"/>
                     <constraints>
                       <tabbedpane title="Municipios"/>
                     </constraints>
                     <properties/>
                     <border type="none"/>
-                    <children/>
+                    <children>
+                      <component id="a3176" class="javax.swing.JTextField" binding="SearchMunicipios">
+                        <constraints>
+                          <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+                            <preferred-size width="150" height="-1"/>
+                          </grid>
+                        </constraints>
+                        <properties>
+                          <font size="16"/>
+                        </properties>
+                      </component>
+                      <component id="7f624" class="javax.swing.JLabel">
+                        <constraints>
+                          <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                        </constraints>
+                        <properties>
+                          <font size="16"/>
+                          <icon value="Icons/search.png"/>
+                          <text value=""/>
+                        </properties>
+                      </component>
+                      <scrollpane id="1a4ae">
+                        <constraints>
+                          <grid row="1" column="0" row-span="1" col-span="2" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+                        </constraints>
+                        <properties>
+                          <font size="16"/>
+                        </properties>
+                        <border type="none"/>
+                        <children>
+                          <component id="4053" class="javax.swing.JTable" binding="MunicipiosTable">
+                            <constraints/>
+                            <properties>
+                              <enabled value="false"/>
+                              <font size="16"/>
+                            </properties>
+                          </component>
+                        </children>
+                      </scrollpane>
+                    </children>
                   </grid>
                   <grid id="b168a" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
                     <margin top="0" left="0" bottom="0" right="0"/>

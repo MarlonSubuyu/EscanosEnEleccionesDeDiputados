@@ -1,3 +1,2 @@
-0;0;
 1523;Santiago;
 99;Tamboril;

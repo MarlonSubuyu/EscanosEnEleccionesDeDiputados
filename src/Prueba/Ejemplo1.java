@@ -1,3 +1,5 @@
+package Prueba;
+
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -12,7 +14,7 @@ import java.util.Scanner;
 
 public class Ejemplo1 {
 
-    public String GuardarDatos(String codigo, String nombre, String apellido, String edad) throws
+    public String GuardarDatos( String codigo, String nombre, String apellido, String edad) throws
             IOException {
         String Mensaje1 = null;
         File F1 = new File("e:archivoCte.txt");

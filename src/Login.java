@@ -1,7 +1,6 @@
 import javax.swing.*;
 import java.awt.*;
 import java.io.*;
-//import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Scanner;
 
@@ -60,6 +59,7 @@ public class Login extends JFrame {
         setVisible(true);
         IniciarSesion.setEnabled(false);
         Registrarse.setEnabled(false);
+        LinkedList<String> Lista = new LinkedList<>();
 
 //        Si esta seleccionado administrador
         Si.addActionListener(ea -> {
@@ -67,7 +67,7 @@ public class Login extends JFrame {
             IniciarSesion.setEnabled(false);
             Registrarse.addActionListener(i -> {
                 String Nivel_Acceso = "0"; //0 (Cero) para el administrador
-                sesion(Nivel_Acceso, Archivo);
+                sesion(Nivel_Acceso, Archivo, Lista);
             });
         });
 //        No esta seleccionado administrador
@@ -76,7 +76,7 @@ public class Login extends JFrame {
             IniciarSesion.setEnabled(true);
             IniciarSesion.addActionListener(i -> {
                 String Nivel_Acceso = "1"; //1 (Uno) para usuarios normales
-                sesion(Nivel_Acceso, Archivo);
+                sesion(Nivel_Acceso, Archivo, Lista);
             });
         });
     }
@@ -84,15 +84,9 @@ public class Login extends JFrame {
     public static void main(String[] args) throws ClassNotFoundException, UnsupportedLookAndFeelException, InstantiationException, IllegalAccessException {
         UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
         new Login();
-        // MainWindow MW = new MainWindow();
-        //MW.setVisible(true);
-        /*FileWriter Usuarios = new FileWriter(new File("C:\\Users\\eddys\\Desktop\\Usuarios.txt"));
-        String title = "Marlon 123";
-        Usuarios.write(title);
-        Usuarios.close();*/
     }
 
-    public void sesion(String Nivel_Acceso, File Usuarios) {
+    public void sesion( String Nivel_Acceso, File Usuarios, LinkedList<String> Lista ) {
         try {
             String Usuario = UsuarioInput.getText();
             String Password = String.valueOf(PasswordInput.getPassword());
@@ -101,7 +95,6 @@ public class Login extends JFrame {
                 JOptionPane.showMessageDialog(null, "No puede dejar los campos vacios", null, JOptionPane.INFORMATION_MESSAGE, error);
             } else {
                 Scanner scan = new Scanner(Usuarios);
-                LinkedList<String> Lista = new LinkedList<>();
 
                 String delimitador = "\\s*;\\s*";
                 scan.useDelimiter(delimitador);
@@ -139,9 +132,9 @@ public class Login extends JFrame {
         } catch (NullPointerException | IOException w) {
             ImageIcon error = new ImageIcon(getClass().getResource("Icons/Error.png"));
             JOptionPane.showMessageDialog(null, "Ocurrio un error interno, inténtelo nuevamente", null, JOptionPane.INFORMATION_MESSAGE, error);
+            w.getStackTrace();
             UsuarioInput.setText(null);
             PasswordInput.setText(null);
         }
-
     }
 }
