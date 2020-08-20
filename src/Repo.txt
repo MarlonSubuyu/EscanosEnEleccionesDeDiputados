@@ -63,3 +63,61 @@
 //            JTable tabla = new JTable((Object[][]) T,columnsName);
 //            ConsultasUsuarios.add(tabla);
 //            }
+
+
+///////////////////////////////municipios circunscripciones y provincias
+
+
+
+//                boolean verificador = false;
+//                boolean verificadorMunicipio = false;
+//                int IdMunicipiosCircunscripcion = 0;
+//                try {
+//                    try {
+//                        IdMunicipiosCircunscripcion = Integer.parseInt(Id_Municipio_Circuns);
+//                    } catch (NumberFormatException n) {
+//                        ImageIcon list = new ImageIcon(getClass().getResource("Icons/warninglist.png"));
+//                        JOptionPane.showMessageDialog(null, "Id del municipio debe ser un numero entero \nId de la provincia debe ser un numero entero", null, JOptionPane.INFORMATION_MESSAGE, list);
+//                    }
+//
+//
+//                    ArrayList<String> Lista = new ArrayList<>();
+//                    Scanner scan = new Scanner(LeerArchivo);
+//                    scan.useDelimiter(delimitador);
+//                    scan.useDelimiter(delimitador);
+//
+//                    while (scan.hasNext()) {
+//                        String ID = scan.next();
+//                        String PROVINCIA = scan.next();
+//                        Lista.add(ID);
+//                        Lista.add(PROVINCIA);
+//                        if (Id_Provincia_Circuns.equals(ID)) {
+//                            verificador = true;
+//                        }
+//                        scan.nextLine();
+//                    }
+//                    scan.close();
+//                    ArrayList<String> ListaMunicipios = new ArrayList<>();
+//
+//                    Scanner entrada = new Scanner(LeerArchvioMunicipio);
+//                    entrada.useDelimiter(delimitador);
+//
+//                    while (entrada.hasNext()) {
+//                        String ID = entrada.next();
+//                        ListaMunicipios.add(ID);
+//                        if (Id_Municipio_Circuns.equals(ID)) {
+//                            verificador = true;
+//                        }
+//                        entrada.nextLine();
+//
+//                    }
+//                    Id_Municipio_CircunsArray = new int[ListaMunicipios.size()];
+//                    for (int i = 0; i < ListaMunicipios.size(); i++) {
+//                        Id_Municipio_CircunsArray[i] = Integer.parseInt(ListaMunicipios.get(i));
+//                        if (Id_Municipio_CircunsArray[i] == IdMunicipiosCircunscripcion) {
+//                            verificadorMunicipio = true;
+//                        }
+//                    }
+//                } catch (IOException ex) {
+//                    ex.getStackTrace();
+//                }
