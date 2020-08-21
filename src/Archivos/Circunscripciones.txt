@@ -7,3 +7,4 @@
 1717;Santiago escuela 8;99;1515;5;
 0001;Licey escuela 1;99;1515;1;
 002;Santiago escuela 9;99;1515;111;
+7878;Puerto Principe;99;7878;200;

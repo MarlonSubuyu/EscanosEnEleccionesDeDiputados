@@ -104,6 +104,12 @@ public class MainWindow extends JFrame {
     private JButton ExisteIdProvinciaCircunscripcion;
     private JButton ExisteIdMunicipioCircunscripcion;
     private JButton ExisteIdProvinciaMunicipio;
+    private JTextField SearchCircunscripciones;
+    private JTable CircunscripcionesTable;
+    private JTextField SearchCandidatos;
+    private JTable CandidatosTable;
+    private JTextField SearchRecintos;
+    private JTable RecintosTable;
 
     public MainWindow() {
 
@@ -191,10 +197,16 @@ public class MainWindow extends JFrame {
             PartidosTable.setModel(new DefaultTableModel((Object[][]) null, null));
             ProvinciasTable.setModel(new DefaultTableModel((Object[][]) null, null));
             MunicipiosTable.setModel(new DefaultTableModel((Object[][]) null, null));
+            CircunscripcionesTable.setModel(new DefaultTableModel((Object[][]) null, null));
+            CandidatosTable.setModel(new DefaultTableModel((Object[][]) null, null));
+            RecintosTable.setModel(new DefaultTableModel((Object[][]) null, null));
             LeerUsuarios();
             LeerPartidos();
             LeerProvincias();
             LeerMunicipios();
+            LeerCircunscripciones();
+            LeerCandidatos();
+            LeerRecintos();
         });
 
 //        Si esta seleccionado administrador
@@ -1123,6 +1135,7 @@ public class MainWindow extends JFrame {
 //    todo hacer metodo hondt
 
     // TODO JTable Joseph, podes copiar cualquiera de los 4 metodos, todos hacen lo mismo
+
     public void LeerUsuarios() {
         String Usuarios = System.getProperty("user.dir") + "\\src\\Archivos\\Usuarios.txt";
         File Archivo = new File(Usuarios);
@@ -1236,6 +1249,122 @@ public class MainWindow extends JFrame {
         }
     }
 
+    public void LeerCircunscripciones() {
+        String Circunscripciones = System.getProperty("user.dir") + "\\src\\Archivos\\Circunscripciones.txt";
+        File Archivo = new File(Circunscripciones);
+        FileException(Archivo);
+        try {
+            String[] cabecera = {"Id de la circunscripcion", "Nombre de la circunscripcion", "Id de la provincia circunscripcion", "Id del municipio circunscripcion", "Cantidad de candidatos"};
+            String delimitador = "\\s*;\\s*";
+            Scanner scan = new Scanner(Archivo);
+            scan.useDelimiter(delimitador);
+            DefaultTableModel model = (DefaultTableModel) CircunscripcionesTable.getModel();
+            model.setColumnIdentifiers(cabecera);
+            while (scan.hasNext()) {
+                String ID = scan.next();
+                String NOMBRE = scan.next();
+                String PROVINCIA = scan.next();
+                String MUNICIPIO = scan.next();
+                String CANTIDAD = scan.next();
+                String[] DATA = {ID, NOMBRE, PROVINCIA, MUNICIPIO, CANTIDAD};
+                model.addRow(DATA);
+                scan.nextLine();
+            }
+
+            SearchCircunscripciones.addKeyListener(new KeyAdapter() {
+                @Override
+                public void keyReleased( KeyEvent e ) {
+                    super.keyReleased(e);
+                    String search = SearchCircunscripciones.getText().toLowerCase();
+                    TableRowSorter<DefaultTableModel> tr = new TableRowSorter<>(model); //DefaultTableModel
+                    CircunscripcionesTable.setRowSorter(tr);
+                    tr.setRowFilter(regexFilter(search));
+                }
+            });
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.out.println("Error al leer la tabla Circunscripciones");
+        }
+    }
+
+    public void LeerCandidatos() {
+        String Candidatos = System.getProperty("user.dir") + "\\src\\Archivos\\Candidatos.txt";
+        File Archivo = new File(Candidatos);
+        FileException(Archivo);
+        try {
+            String[] cabecera = {"Id del Candidato", "Nombre del Candidato", "Id del partido Candidato", "Id de la circunscripcion", "Total de votos"};
+            String delimitador = "\\s*;\\s*";
+            Scanner scan = new Scanner(Archivo);
+            scan.useDelimiter(delimitador);
+            DefaultTableModel model = (DefaultTableModel) CandidatosTable.getModel();
+            model.setColumnIdentifiers(cabecera);
+            while (scan.hasNext()) {
+                String ID = scan.next();
+                String NOMBRE = scan.next();
+                String PARTIDO = scan.next();
+                String CRICUNSCRIPCION = scan.next();
+                String VOTOS = scan.next();
+                String[] DATA = {ID, NOMBRE, PARTIDO, CRICUNSCRIPCION, VOTOS};
+                model.addRow(DATA);
+                scan.nextLine();
+            }
+
+            SearchCandidatos.addKeyListener(new KeyAdapter() {
+                @Override
+                public void keyReleased( KeyEvent e ) {
+                    super.keyReleased(e);
+                    String search = SearchCandidatos.getText().toLowerCase();
+                    TableRowSorter<DefaultTableModel> tr = new TableRowSorter<>(model); //DefaultTableModel
+                    CandidatosTable.setRowSorter(tr);
+                    tr.setRowFilter(regexFilter(search));
+                }
+            });
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.out.println("Error al leer la tabla Candidatos");
+        }
+    }
+
+    public void LeerRecintos(){
+        String Recintos = System.getProperty("user.dir") + "\\src\\Archivos\\Recintos.txt";
+        File Archivo = new File(Recintos);
+        FileException(Archivo);
+        try {
+            String[] cabecera = {"Id del Recinto", "Nombre del Recinto", "Id del municipio Recinto", "Dirreccion del Recinto"};
+            String delimitador = "\\s*;\\s*";
+            Scanner scan = new Scanner(Archivo);
+            scan.useDelimiter(delimitador);
+            DefaultTableModel model = (DefaultTableModel) RecintosTable.getModel();
+            model.setColumnIdentifiers(cabecera);
+            while (scan.hasNext()) {
+                String ID = scan.next();
+                String NOMBRE = scan.next();
+                String MUNICIPIO = scan.next();
+                String DIRECCION = scan.next();
+                String[] DATA = {ID, NOMBRE, MUNICIPIO, DIRECCION};
+                model.addRow(DATA);
+                scan.nextLine();
+            }
+
+            SearchRecintos.addKeyListener(new KeyAdapter() {
+                @Override
+                public void keyReleased( KeyEvent e ) {
+                    super.keyReleased(e);
+                    String search = SearchRecintos.getText().toLowerCase();
+                    TableRowSorter<DefaultTableModel> tr = new TableRowSorter<>(model); //DefaultTableModel
+                    RecintosTable.setRowSorter(tr);
+                    tr.setRowFilter(regexFilter(search));
+                }
+            });
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.out.println("Error al leer la tabla Recintos");
+        }
+    }
+
     public void LeerMunicipios() {
         String Municipios = System.getProperty("user.dir") + "\\src\\Archivos\\Municipios.txt";
         File Archivo = new File(Municipios);
@@ -1269,7 +1398,7 @@ public class MainWindow extends JFrame {
 
         } catch (IOException e) {
             e.printStackTrace();
-            System.out.println("Error al leer la tabla Provincias");
+            System.out.println("Error al leer la tabla Municipios");
         }
     }
 
