@@ -1,7 +1,5 @@
-1010;1ro;15;
-2020;2do;22;
-3030;3er partido;33;
-4040;cuarto;40;
-5050;5to;55;
-10105;6to;115;
-8080;7mo;88;
+1;Partido Revolucionario Moderno;2154866;
+2;Partido de la Liberación Dominicana;387881;
+3;Fuerza del Pueblo;2154411;
+4;Movimiento Democrático Alternativo;10549;
+5;Partido Unión Democrática Cristiana;6579;

@@ -1,10 +1,5 @@
-000;Licey;99;1212;1;
-111;Santiago escuela 2;1523;1212;12;
-222;Santiago escuela 1;99;1212;1;
-333;Santiago escuela 3;99;1212;144;
-1515;Santiago escuela 5;99;1515;1;
-9090;Santiago escuela 6;99;1313;1;
-1717;Santiago escuela 8;99;1515;5;
-0001;Licey escuela 1;99;1515;1;
-002;Santiago escuela 9;99;1515;111;
-7878;Puerto Principe;99;7878;200;
+1;Oficialía Civil de la Primera Circunscripción ;1;1;36;
+2;Centro de Servicios Legalización Actas Santiago- JCE;2;2;18;
+3;1ra. Oficialia del Estado Civil;3;3;6;
+4;Palacio Municipal C/Libertad No.16;4;4;5;
+5;La Romana 2da. Circ.;5;5;12;

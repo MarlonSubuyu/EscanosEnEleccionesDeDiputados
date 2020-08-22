@@ -1,3 +1,0 @@
-1523;Santiago;
-99;Tamboril;
-98;Santo Domingo;

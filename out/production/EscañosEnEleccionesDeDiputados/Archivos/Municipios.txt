@@ -1,6 +1,0 @@
-51000;Este es el municipio de Santiago queda al norte del pais;1523;
-50001;Tamboril es parte de Santiago;99;
-1313;Santiago 1;99;
-1414;Santiago 2;99;
-1515;Santiago 3;99;
-1212;Santiago;99;

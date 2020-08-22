@@ -1,2 +1,5 @@
-0;0;0;0;0;
-1010;Leonel;1010;1515;1;
+1;Luis Abinader;1;1;1727553;
+2;Gonzalo Castillo;2;2;1426398;
+3;Leonel Fernandez;3;3;365140;
+4;Carlos Sanchez;4;4;30718;
+5;Luis Acosta Moreta;5;5;19561;

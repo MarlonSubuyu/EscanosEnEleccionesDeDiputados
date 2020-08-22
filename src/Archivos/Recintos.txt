@@ -1,5 +1,5 @@
-0;0;0;0;
-8585;Primer recinto;1515;Calle 1 Santiago;
-8888;Segundo recinto;1515;Calle 1 Santiago;
-8080;Tercer recinto;1515;Calle 1 Santiago;
-3030;Cuarto Recinto;1313;Calle 2 Santiago;
+1;Junta del distrito- Centro de los Heroes;1;Calle República del Líbano, Santo Domingo;
+2;Junta Central Electoral;2;Av Las Carreras, Santiago De Los Caballeros 51000 ;
+3;Oficialia Civil Puerto Plata;3;Puerto Plata 57000;
+4;Centro de Servicios Legalización Actas Barahona (JCE).;4;Esq. Colon, Frente a la Gobernacion., Calle Duvergé, Barahona 81000;
+5;Junta Municipal Electoral;5;Calle Duarte 25, La Romana 22000 ;
