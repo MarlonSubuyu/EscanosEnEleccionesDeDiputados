@@ -67,6 +67,11 @@ public class MainWindow extends JFrame {
     private JTable ProvinciasTable;
     private JTextField SearchMunicipios;
     private JTable MunicipiosTable;
+    public JButton ExisteNombreRecinto;
+    private JTable CircunscripcionesTable;
+    private JTextField SearchCandidatos;
+    private JTable CandidatosTable;
+    private JTextField SearchRecintos;
     private JButton btnAceptarCircunscripciones;
     private JTextField NombreCircunscripcion;
     private JTextField IdProvinciaCircuns;
@@ -75,7 +80,7 @@ public class MainWindow extends JFrame {
     private JTextField IdCircunscripcion;
     private JTextField CantCandidatos;
     public JButton ExisteIdPartidoCandidato;
-    public JTextField ExisteNombreRecinto;
+    private JTable RecintosTable;
     private JButton GuardarMovimientos;
     private JTextField IdColegio;
     private JTextField IdRecintodeColegios;
@@ -104,12 +109,13 @@ public class MainWindow extends JFrame {
     private JButton ExisteIdProvinciaCircunscripcion;
     private JButton ExisteIdMunicipioCircunscripcion;
     private JButton ExisteIdProvinciaMunicipio;
+    private JTextField ExisteCircunscripcionRecintoyDigitado;
+    private JTextField IdCandidatoDet;
+    private JLabel IdCandidatoDeterminantetxt;
+    private JButton ExisteIdCandidatoColegio;
+    private JTextField CantidadDeVotos;
+    private JLabel CantidaddeVotostxt;
     private JTextField SearchCircunscripciones;
-    private JTable CircunscripcionesTable;
-    private JTextField SearchCandidatos;
-    private JTable CandidatosTable;
-    private JTextField SearchRecintos;
-    private JTable RecintosTable;
 
     public MainWindow() {
 
@@ -574,8 +580,9 @@ public class MainWindow extends JFrame {
         final boolean[] igual = {false};
         final boolean[] verificadorMunicipio = {false};
         final boolean[] verificador = {false};
-        ArrayList<String> ListaMunicipios = new ArrayList<>();
+        ArrayList<Integer> ListaMunicipios = new ArrayList<>();
         String MODELO = "0" + ";" + "0" + ";" + "0" + ";" + "0" + ";" + "0" + ";" + "\r\n";
+        final String[] PROVINCIA = {null};
         getValor(delimitador, Archivo, MODELO);
         IdCircunscripcion.addKeyListener(new KeyAdapter() {
             @Override
@@ -599,16 +606,16 @@ public class MainWindow extends JFrame {
                     Scanner scan = new Scanner(LeerArchivoMunicipio);
                     scan.useDelimiter(delimitador);
                     while (scan.hasNext()) {
-                        String MUNICIPIO = scan.next();
-                        scan.next();
-                        String PROVINCIA = scan.next();
-                        if (IdProvinciaCircuns.getText().equals(PROVINCIA)) {
+                        int MUNICIPIO = scan.nextInt();
+                        if (IdProvinciaCircuns.getText().equals(PROVINCIA[0])) {
                             verificador[0] = true;
                             ListaMunicipios.add(MUNICIPIO);
                             ImageIcon exists = new ImageIcon(getClass().getResource("Icons/exists.png"));
                             ExisteIdProvinciaCircunscripcion.setText("El Id de la Provincia existe");
                             ExisteIdProvinciaCircunscripcion.setIcon(exists);
                         } else {
+                            scan.next();
+                            PROVINCIA[0] = scan.next();
                             ImageIcon noexists = new ImageIcon(getClass().getResource("Icons/noexists.png"));
                             ExisteIdProvinciaCircunscripcion.setText("El Id de la provincia no existe");
                             ExisteIdProvinciaCircunscripcion.setIcon(noexists);
@@ -628,25 +635,29 @@ public class MainWindow extends JFrame {
             public void keyReleased( KeyEvent e ) {
                 super.keyReleased(e);
                 try {
-                    int[] Id_Municipio_CircunsArray = new int[ListaMunicipios.size()];
-                    int i;
-                    for (i = 0; i < ListaMunicipios.size(); i++) {
-                        Id_Municipio_CircunsArray[i] = Integer.parseInt(ListaMunicipios.get(i));
-                        if (Id_Municipio_CircunsArray[i] == Integer.parseInt(IdMunicipioCircuns.getText())) {
+                    Integer[] Id_Municipio_CircunsArray = new Integer[(ListaMunicipios.size())];
+                    ListaMunicipios.toArray(Id_Municipio_CircunsArray);
+                    int i = 0;
+                    do {
+                        if (Id_Municipio_CircunsArray[i] == Integer.parseInt(IdMunicipioCircuns.getText()) || verificadorMunicipio[0]) {
                             verificadorMunicipio[0] = true;
                             ImageIcon exists = new ImageIcon(getClass().getResource("Icons/exists.png"));
                             ExisteIdMunicipioCircunscripcion.setText("El Id del Municipio existe");
                             ExisteIdMunicipioCircunscripcion.setIcon(exists);
                             break;
                         } else {
-                            verificadorMunicipio[0] = false;
                             ImageIcon noexists = new ImageIcon(getClass().getResource("Icons/noexists.png"));
                             ExisteIdMunicipioCircunscripcion.setText("El Id del Municipio no existe");
                             ExisteIdMunicipioCircunscripcion.setIcon(noexists);
                         }
-                    }
-                } catch (NumberFormatException n) {
+                        i++;
+                    } while (i < (ListaMunicipios.size()) || verificadorMunicipio[0]);
+                } catch (NumberFormatException | ArrayIndexOutOfBoundsException n) {
                     n.getStackTrace();
+                    IdMunicipioCircuns.setText(null);
+                    ImageIcon noexists = new ImageIcon(getClass().getResource("Icons/noexists.png"));
+                    ExisteIdMunicipioCircunscripcion.setText("El Id del Municipio no existe");
+                    ExisteIdMunicipioCircunscripcion.setIcon(noexists);
                 }
             }
         });
@@ -1135,7 +1146,6 @@ public class MainWindow extends JFrame {
 //    todo hacer metodo hondt
 
     // TODO JTable Joseph, podes copiar cualquiera de los 4 metodos, todos hacen lo mismo
-
     public void LeerUsuarios() {
         String Usuarios = System.getProperty("user.dir") + "\\src\\Archivos\\Usuarios.txt";
         File Archivo = new File(Usuarios);
@@ -1249,6 +1259,43 @@ public class MainWindow extends JFrame {
         }
     }
 
+    public void LeerMunicipios() {
+        String Municipios = System.getProperty("user.dir") + "\\src\\Archivos\\Municipios.txt";
+        File Archivo = new File(Municipios);
+        FileException(Archivo);
+        try {
+            String[] cabecera = {"Id del municipio", "Descripción del municipio", "Id de la provincia"};
+            String delimitador = "\\s*;\\s*";
+            Scanner scan = new Scanner(Archivo);
+            scan.useDelimiter(delimitador);
+            DefaultTableModel model = (DefaultTableModel) MunicipiosTable.getModel();
+            model.setColumnIdentifiers(cabecera);
+            while (scan.hasNext()) {
+                String ID = scan.next();
+                String DESCRIPCION = scan.next();
+                String PROVINCIA = scan.next();
+                String[] DATA = {ID, DESCRIPCION, PROVINCIA};
+                model.addRow(DATA);
+                scan.nextLine();
+            }
+
+            SearchMunicipios.addKeyListener(new KeyAdapter() {
+                @Override
+                public void keyReleased( KeyEvent e ) {
+                    super.keyReleased(e);
+                    String search = SearchMunicipios.getText().toLowerCase();
+                    TableRowSorter<DefaultTableModel> tr = new TableRowSorter<>(model); //DefaultTableModel
+                    MunicipiosTable.setRowSorter(tr);
+                    tr.setRowFilter(regexFilter(search));
+                }
+            });
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.out.println("Error al leer la tabla Provincias");
+        }
+    }
+
     public void LeerCircunscripciones() {
         String Circunscripciones = System.getProperty("user.dir") + "\\src\\Archivos\\Circunscripciones.txt";
         File Archivo = new File(Circunscripciones);
@@ -1309,7 +1356,6 @@ public class MainWindow extends JFrame {
                 model.addRow(DATA);
                 scan.nextLine();
             }
-
             SearchCandidatos.addKeyListener(new KeyAdapter() {
                 @Override
                 public void keyReleased( KeyEvent e ) {
@@ -1327,7 +1373,7 @@ public class MainWindow extends JFrame {
         }
     }
 
-    public void LeerRecintos(){
+    public void LeerRecintos() {
         String Recintos = System.getProperty("user.dir") + "\\src\\Archivos\\Recintos.txt";
         File Archivo = new File(Recintos);
         FileException(Archivo);
@@ -1365,63 +1411,45 @@ public class MainWindow extends JFrame {
         }
     }
 
-    public void LeerMunicipios() {
-        String Municipios = System.getProperty("user.dir") + "\\src\\Archivos\\Municipios.txt";
-        File Archivo = new File(Municipios);
-        FileException(Archivo);
-        try {
-            String[] cabecera = {"Id del municipio", "Descripción del municipio", "Id de la provincia"};
-            String delimitador = "\\s*;\\s*";
-            Scanner scan = new Scanner(Archivo);
-            scan.useDelimiter(delimitador);
-            DefaultTableModel model = (DefaultTableModel) MunicipiosTable.getModel();
-            model.setColumnIdentifiers(cabecera);
-            while (scan.hasNext()) {
-                String ID = scan.next();
-                String DESCRIPCION = scan.next();
-                String PROVINCIA = scan.next();
-                String[] DATA = {ID, DESCRIPCION, PROVINCIA};
-                model.addRow(DATA);
-                scan.nextLine();
-            }
-
-            SearchMunicipios.addKeyListener(new KeyAdapter() {
-                @Override
-                public void keyReleased( KeyEvent e ) {
-                    super.keyReleased(e);
-                    String search = SearchMunicipios.getText().toLowerCase();
-                    TableRowSorter<DefaultTableModel> tr = new TableRowSorter<>(model); //DefaultTableModel
-                    MunicipiosTable.setRowSorter(tr);
-                    tr.setRowFilter(regexFilter(search));
-                }
-            });
-
-        } catch (IOException e) {
-            e.printStackTrace();
-            System.out.println("Error al leer la tabla Municipios");
-        }
-    }
-
     //TODO MOVIMIENTO DE COLEGIO
 
     public void MovimientoColegios( boolean Status_Colegio ) {
         String Recinto = System.getProperty("user.dir") + "\\src\\Archivos\\Recintos.txt";
         File LeerArchivoRecinto = new File(Recinto);
+        String Candidatos = System.getProperty("user.dir") + "\\src\\Archivos\\Candidatos.txt";
+        File LeerArchivoCandidatos = new File(Candidatos);
         String Colegio = System.getProperty("user.dir") + "\\src\\Archivos\\Colegio.txt";
         File Archivo = new File(Colegio);
         String tempColegio = System.getProperty("user.dir") + "\\src\\Archivos\\tempColegio.txt";
         File tempArchivo = new File(tempColegio);
+        String DetalleColegio = System.getProperty("user.dir") + "\\src\\Archivos\\DetalleColegio.txt";
+        File ArchivoDetalleColegio = new File(DetalleColegio);
+        String tempDetalleColegio = System.getProperty("user.dir") + "\\src\\Archivos\\tempDetalleColegio.txt";
+        File tempDetalleArchivo = new File(tempDetalleColegio);
         String delimitador = "\\s*;\\s*";
         FileException(Archivo);
-        IdRecintotxt.setText("Id del Colegio *");
-        IdColegiotxt.setText("Id del Recinto *");
+//        Pane1
+        IdRecintotxt.setText("Id del Recinto *");
+        IdColegiotxt.setText("Id del Colegio *");
         FechaEleccionestxt.setText("Fecha de elecciones *");
         StatusColegiotxt.setText("Status del Colegio");
         GuardarMovimientos.setText("Guardar");
+//      Pane2
+        IdCandidatoDeterminantetxt.setText("Id Candidato *");
+        CantidaddeVotostxt.setText("Cantidad de votos *");
 
+        Calendar Calendar = new GregorianCalendar();
+        Date date = Calendar.getTime();
+        FechaElecciones.setText(String.valueOf(date));
 
         final boolean[] igual = {false};
+        final boolean[] verificadorRecinto = {false};
+        final boolean[] verificadorCircunscripcion = {false};
         String MODELO = "0" + ";" + "0" + ";" + "0" + ";" + "0" + ";" + "\r\n";
+        final String[] NOMBRE = {null};
+        final String[] ID = new String[1];
+        final int[] MUNICIPIO = new int[1];
+        final int[] datos = new int[2];
         getValor(delimitador, Archivo, MODELO);
         IdColegio.addKeyListener(new KeyAdapter() {
             @Override
@@ -1437,91 +1465,138 @@ public class MainWindow extends JFrame {
                 }
             }
         });
-//        if(Archivo.exists()){
-//            StatusColegio.setText(String.valueOf(Status_Colegio));
-//        } else{
-//            System.out.println("El archivo" + Archivo.getName() + "no existe");
-//            Movimiento.setEnabled(false);
-//        }
+
+        IdRecintodeColegios.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyReleased( KeyEvent e ) {
+                super.keyReleased(e);
+                try {
+                    Scanner scan = new Scanner(LeerArchivoRecinto);
+                    scan.useDelimiter(delimitador);
+                    while (scan.hasNext()) {
+                        if (IdRecintodeColegios.getText().equals(ID[0])) {
+                            verificadorRecinto[0] = true;
+                            ImageIcon recinto = new ImageIcon(getClass().getResource("Icons/recinto.png"));
+                            ExisteNombreRecinto.setText(NOMBRE[0]);
+                            ExisteNombreRecinto.setIcon(recinto);
+                            datos[0] = MUNICIPIO[0];
+                            break;
+                        } else {
+                            verificadorRecinto[0] = false;
+                            ImageIcon noexists = new ImageIcon(getClass().getResource("Icons/noexists.png"));
+                            ExisteNombreRecinto.setText("El Recinto no existe");
+                            ExisteNombreRecinto.setIcon(noexists);
+                            ID[0] = scan.next();
+                            NOMBRE[0] = scan.next();
+                            MUNICIPIO[0] = scan.nextInt();
+                            scan.next();
+                        }
+                        scan.nextLine();
+                    }
+                    scan.close();
+                } catch (FileNotFoundException fileNotFoundException) {
+                    fileNotFoundException.printStackTrace();
+                }
+            }
+        });
+
+        final int[] CIRCUNSCRIPCION = new int[1];
+        final boolean[] verificadorCandidato = {false};
+        IdCandidatoDet.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyReleased( KeyEvent e ) {
+                super.keyReleased(e);
+                try {
+                    Scanner scan = new Scanner(LeerArchivoCandidatos);
+                    scan.useDelimiter(delimitador);
+                    while (scan.hasNext()) {
+                        if (IdCandidatoDet.getText().equals(ID[0])) {
+                            verificadorCandidato[0] = true;
+                            ImageIcon exists = new ImageIcon(getClass().getResource("Icons/exists.png"));
+                            ExisteIdCandidatoColegio.setText("Existe");
+                            ExisteIdCandidatoColegio.setIcon(exists);
+                            datos[1] = CIRCUNSCRIPCION[0];
+                            break;
+                        } else {
+                            verificadorCandidato[0] = false;
+                            ImageIcon noexists = new ImageIcon(getClass().getResource("Icons/noexists.png"));
+                            ExisteIdCandidatoColegio.setText("No existe");
+                            ExisteIdCandidatoColegio.setIcon(noexists);
+                            ID[0] = scan.next();
+                            scan.next();
+                            scan.next();
+                            CIRCUNSCRIPCION[0] = scan.nextInt();
+                            scan.next();
+                        }
+                        scan.nextLine();
+                    }
+                    scan.close();
+                } catch (FileNotFoundException fileNotFoundException) {
+                    fileNotFoundException.printStackTrace();
+                }
+                System.out.println("datos[0] " + datos[0] + " datos[1] " + datos[1]);
+                if (datos[0] != 0 && datos[1] != 0) {
+                    if (datos[0] == datos[1]) {
+                        System.out.println("entro al if \t datos[0] " + datos[0] + " datos[1] " + datos[1]);
+                        verificadorCircunscripcion[0] = true;
+                        System.out.println("Circunscripcion igual");
+                        IdCandidatoDet.setEditable(false);
+                        ExisteCircunscripcionRecintoyDigitado.setText("La circunscripcion del candidato corresponde con la del recinto");
+                    } else {
+                        verificadorCircunscripcion[0] = false;
+                        ExisteCircunscripcionRecintoyDigitado.setText("La circunscripcion del candidato no corresponde con la del recinto");
+                    }
+                    datos[0] = 1;
+                    datos[1] = -1;
+                }
+            }
+        });
+
         GuardarMovimientos.addActionListener(e -> {
             String Id_Colegio = IdColegio.getText();
             String Id_RecintoString = IdRecintodeColegios.getText();
+            String Id_Candidatos_Detalles = IdCandidatoDet.getText();
             //TODO la fecha elecciones debe ser un Calendar porque Date esta deprecado
             String Fecha_Elecciones = FechaElecciones.getText();
-            Calendar Calendar = new GregorianCalendar();
-            FechaElecciones.setText(String.valueOf(Calendar));
-            String NOMBRE;
-//            Fecha_Ele.setTime(Fecha_Elecciones);
-
+            String Cantidad_Votos_Det = CantidadDeVotos.getText();
             if (Id_Colegio.equals("") || Id_RecintoString.equals("") || Fecha_Elecciones.equals("")) {
                 ImageIcon list = new ImageIcon(getClass().getResource("Icons/warninglist.png"));
                 JOptionPane.showMessageDialog(null, "Todos los campos marcados con asterisco * deben estar llenos", null, JOptionPane.INFORMATION_MESSAGE, list);
             } else if (igual[0]) {
                 try {
-//                    ArrayList<String> ListaMunicipios = new ArrayList<>();
-                    Scanner scan = new Scanner(LeerArchivoRecinto);
-                    scan.useDelimiter(delimitador);
-
-                    while (scan.hasNext()) {
-                        String RECINTO = scan.next();
-                        NOMBRE = scan.next();
-                        scan.next();
-                        scan.next();
-                        if (Id_RecintoString.equals(RECINTO)) {
-                            ExisteNombreRecinto.setText(NOMBRE);
-//                            ListaMunicipios.add(MUNICIPIO);
-                        } else {
-                            ExisteNombreRecinto.setText("Recinto no existe");
-                        }
-                        scan.nextLine();
+                    if (verificadorRecinto[0] && verificadorCandidato[0] && verificadorCircunscripcion[0]) {
+                        int Id_Recinto = Integer.parseInt(Id_RecintoString);
+                        String nCadena = (Id_Colegio + ";" + Id_Recinto + ";" + Fecha_Elecciones + ";" + Status_Colegio + ";"); //+ "\r\n" Se agrego en el siguiente metodo
+                        ModificaDatos(nCadena, Id_Colegio, Archivo, tempArchivo);
+//                        TODO hacer otro modificadatos y nCadena2
+                        String nCadena2 = (Id_Colegio + ";" + Id_Candidatos_Detalles + ";" + Cantidad_Votos_Det + ";"); //+ "\r\n" Se agrego en el siguiente metodo
+                        ModificaDatos(nCadena2, Id_Colegio, ArchivoDetalleColegio, tempDetalleArchivo);
+                        ImageIcon edit = new ImageIcon(getClass().getResource("Icons/Edit.png"));
+                        JOptionPane.showMessageDialog(null, "Movimiento modificado exitosamente", null, JOptionPane.INFORMATION_MESSAGE, edit);
+                    } else {
+                        System.out.println("No se registro correctamente :(");
                     }
-                    scan.close();
-//                    Id_Municipio_CircunsArray = new int[ListaMunicipios.size()];
-//                    for (int i = 0; i < ListaMunicipios.size(); i++) {
-//                        Id_Municipio_CircunsArray[i] = Integer.parseInt(ListaMunicipios.get(i));
-//                        if (Id_Municipio_CircunsArray[i] == IdMunicipiosCircunscripcion) {
-//                            verificadorMunicipio = true;
-//                        }
-//                    }
-                    int Id_Recinto = Integer.parseInt(Id_RecintoString);
-                    String nCadena = (Id_Colegio + ";" + Id_Recinto + ";" + Fecha_Elecciones + ";" + Status_Colegio + ";"); //+ "\r\n" Se agrego en el siguiente metodo
-                    ModificaDatos(nCadena, Id_Colegio, Archivo, tempArchivo);
-                    ImageIcon edit = new ImageIcon(getClass().getResource("Icons/Edit.png"));
-                    JOptionPane.showMessageDialog(null, "Movimiento modificado exitosamente", null, JOptionPane.INFORMATION_MESSAGE, edit);
                 } catch (NumberFormatException n) {
                     ImageIcon list = new ImageIcon(getClass().getResource("Icons/warninglist.png"));
                     JOptionPane.showMessageDialog(null, "Id del recinto debe ser un numero entero", null, JOptionPane.INFORMATION_MESSAGE, list);
-                } catch (FileNotFoundException fileNotFoundException) {
-                    fileNotFoundException.printStackTrace();
                 }
                 IdPartido.setText(null);
                 DescripcionPartido.setText(null);
                 VotosPartidos.setText(null);
             } else {
                 try {
-                    Scanner scan = new Scanner(LeerArchivoRecinto);
-                    scan.useDelimiter(delimitador);
-
-                    while (scan.hasNext()) {
-                        String RECINTO = scan.next();
-                        NOMBRE = scan.next();
-                        scan.next();
-                        scan.next();
-                        if (Id_RecintoString.equals(RECINTO)) {
-                            ExisteNombreRecinto.setText(NOMBRE);
-//                            ListaMunicipios.add(MUNICIPIO);
-                        } else {
-                            ExisteNombreRecinto.setText("Recinto no existe");
-                        }
-                        scan.nextLine();
+                    if (verificadorRecinto[0] && verificadorCandidato[0] && verificadorCircunscripcion[0]) {
+                        int Id_Recinto = Integer.parseInt(Id_RecintoString);
+                        FileWriter Writer = new FileWriter(Colegio, true);
+                        FileWriter Writer2 = new FileWriter(DetalleColegio, true);
+                        Writer.write(Id_Colegio + ";" + Id_Recinto + ";" + Fecha_Elecciones + ";" + Status_Colegio + ";" + "\r\n");
+                        Writer2.write(Id_Colegio + ";" + Id_Candidatos_Detalles + ";" + Cantidad_Votos_Det + ";" + "\r\n");
+                        ImageIcon create = new ImageIcon(getClass().getResource("Icons/create.png"));
+                        JOptionPane.showMessageDialog(null, "Movimiento creado exitosamente", null, JOptionPane.INFORMATION_MESSAGE, create);
+                        Writer.close();
+                    } else {
+                        System.out.println("No se registro correctamente :(");
                     }
-                    scan.close();
-                    int Id_Recinto = Integer.parseInt(Id_RecintoString);
-                    FileWriter Writer = new FileWriter(Colegio, true);
-                    Writer.write(Id_Colegio + ";" + Id_Recinto + ";" + Fecha_Elecciones + ";" + Status_Colegio + ";" + "\r\n");
-                    ImageIcon create = new ImageIcon(getClass().getResource("Icons/create.png"));
-                    JOptionPane.showMessageDialog(null, "Movimiento creado exitosamente", null, JOptionPane.INFORMATION_MESSAGE, create);
-                    Writer.close();
                 } catch (IOException ioException) {
                     ioException.printStackTrace();
                 } catch (NumberFormatException n) {

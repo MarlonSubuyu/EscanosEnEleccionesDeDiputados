@@ -1,4 +1,5 @@
 0;0;0;0;
 8585;Primer recinto;1515;Calle 1 Santiago;
-8090;Moca;1212;Moca, Calle principal;
-6868;Licey;1414;Santiago, calle #1;
+8888;Segundo recinto;1515;Calle 1 Santiago;
+8080;Tercer recinto;1515;Calle 1 Santiago;
+3030;Cuarto Recinto;1313;Calle 2 Santiago;
